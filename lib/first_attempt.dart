@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
+class FirstAttempt extends StatefulWidget {
   final String? title;
-  const HomePage({super.key, required this.title});
+  const FirstAttempt({super.key, required this.title});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<FirstAttempt> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<FirstAttempt> {
   // List<Map<String, bool>> allItemsList = [
   //   {'Item 1': false},
   //   {'Item 2': false},

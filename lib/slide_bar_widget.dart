@@ -12,32 +12,18 @@ class _SlideBarWidgetState extends State<SlideBarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Slide Bar'),
-      ),
-      body: Center(
-        child: SlideSelectionBar(),
-      ),
-    );
-  }
-}
-
-class SlideSelectionBar extends StatefulWidget {
-  const SlideSelectionBar({super.key});
-
-  @override
-  State<SlideSelectionBar> createState() => _SlideSelectionBarState();
-}
-
-class _SlideSelectionBarState extends State<SlideSelectionBar> {
-  double currentSliderValue = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Flexible(
+          child: FittedBox(
+            child: Text(
+              'Selected Number of People: ${currentSliderValue.round()}',
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+        ),
+        SizedBox(height: 20),
         Slider(
           value: currentSliderValue,
           min: 0,
@@ -48,11 +34,6 @@ class _SlideSelectionBarState extends State<SlideSelectionBar> {
             currentSliderValue = value;
             setState(() {});
           },
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Selected Number of People: ${currentSliderValue.round()}',
-          style: TextStyle(fontSize: 20),
         ),
       ],
     );
