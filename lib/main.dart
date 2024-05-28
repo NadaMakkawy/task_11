@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:task_11/room_list_view_widget.dart';
+import 'package:task_11/view_check_widget.dart';
 
 import 'extras_checklist_widget.dart';
 import 'slide_bar_widget.dart';
@@ -46,18 +48,33 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.bold, color: Colors.white, fontSize: 24),
         ),
       ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            child: Image.asset('assets/entrance.jpg'),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                child: Image.asset('assets/entrance.jpg'),
+              ),
+              const DatePickerWidget(),
+              const SlideBarWidget(),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: ExtrasChecklistWidget(),
+              ),
+              // SizedBox(
+              //   height: MediaQuery.of(context).size.height * 1,
+              //   child: RoomListView(),
+              // ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 1,
+                child: ViewCheckWidget(),
+              ),
+            ],
           ),
-          const DatePickerWidget(),
-          const SlideBarWidget(),
-          Expanded(
-            child: ExtrasChecklistWidget(),
-          ),
-        ],
+        ),
       ),
     );
   }

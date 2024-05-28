@@ -55,6 +55,7 @@ class _ExtrasChecklistWidgetState extends State<ExtrasChecklistWidget> {
       mainAxisSize: MainAxisSize.min,
       children: [
         ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: extrasList.length,
           itemBuilder: (context, index) {
@@ -66,9 +67,7 @@ class _ExtrasChecklistWidgetState extends State<ExtrasChecklistWidget> {
               value: item['isSelected'],
               onChanged: (bool? value) {
                 item['isSelected'] = value;
-                setState(
-                  () {},
-                );
+                setState(() {});
               },
             );
           },

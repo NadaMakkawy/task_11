@@ -48,25 +48,25 @@ class _RoomListViewState extends State<RoomListView> {
                 updateFilteredList();
                 setState(() {});
               },
-              child: Text('Sea View'),
+              child: const Text('Sea View'),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
                 viewFilter = 'City View';
                 updateFilteredList();
                 setState(() {});
               },
-              child: Text('City View'),
+              child: const Text('City View'),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
                 viewFilter = '';
                 updateFilteredList();
                 setState(() {});
               },
-              child: Text('Clear Filter'),
+              child: const Text('Clear Filter'),
             ),
           ],
         ),
@@ -76,8 +76,8 @@ class _RoomListViewState extends State<RoomListView> {
             updateFilteredListFn: updateFilteredList,
           ),
         ),
-        Divider(),
-        Text('Filtered List:'),
+        const Divider(),
+        const Text('Filtered List:'),
         Expanded(
           child: ListView.builder(
             itemCount: filteredItems.length,
@@ -119,14 +119,12 @@ class _CheckListOptionState extends State<CheckListOption> {
   Widget build(BuildContext context) {
     return CheckboxListTile(
       title: ListTile(
-        leading: Container(
-          child: Image.asset(widget.imagePath!),
-        ),
+        leading: Image.asset(widget.imagePath!),
         // CircleAvatar(
         //   backgroundImage: AssetImage(widget.imagePath!),
         //   radius: 30,
         // ),
-        contentPadding: EdgeInsets.all(0),
+        contentPadding: const EdgeInsets.all(0),
         title: Text(widget.itemName),
         subtitle: widget.itemText,
       ),
@@ -168,27 +166,24 @@ class _CheckListOptionsListState extends State<CheckListOptionsList> {
           itemText: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('$itemDescription'),
+              Text(itemDescription),
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.person,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text('$itemcapacity')
+                  Text(itemcapacity)
                 ],
               )
             ],
           ),
           onChangedFn: (value) {
-            setState(
-              () {
-                widget.itemsList[index].isSelected = value!;
-                widget.updateFilteredListFn();
-              },
-            );
+            widget.itemsList[index].isSelected = value!;
+            widget.updateFilteredListFn();
+            setState(() {});
           },
           imagePath: imagePath,
         );
