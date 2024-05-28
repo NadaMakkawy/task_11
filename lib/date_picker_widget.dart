@@ -8,15 +8,12 @@ class DatePickerWidget extends StatefulWidget {
 }
 
 class _DatePickerWidgetState extends State<DatePickerWidget> {
-  DateTime? startDate;
-  DateTime? endDate;
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now().add(const Duration(days: 1));
 
   int getSelectedDays() {
-    if (startDate != null && endDate != null) {
-      final difference = endDate!.difference(startDate!);
-      return difference.inDays + 1;
-    }
-    return 0;
+    final difference = endDate.difference(startDate);
+    return difference.inDays + 1;
   }
 
   // String getSelectedDateRange() {
@@ -28,8 +25,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
 
   Future<void> selectDateRange(BuildContext context) async {
     final initialDateRange = DateTimeRange(
-      start: startDate ?? DateTime.now(),
-      end: endDate ?? DateTime.now().add(const Duration(days: 3)),
+      start: startDate,
+      end: endDate,
     );
 
     final picked = await showDateRangePicker(
@@ -65,9 +62,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                 ),
               ),
               Text(
-                startDate != null
-                    ? startDate!.toString().split(' ')[0]
-                    : 'Not Selected',
+                startDate.toString().split(' ')[0],
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -88,9 +83,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                 ),
               ),
               Text(
-                endDate != null
-                    ? endDate!.toString().split(' ')[0]
-                    : 'Not Selected',
+                endDate.toString().split(' ')[0],
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
