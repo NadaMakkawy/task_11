@@ -41,39 +41,41 @@ class _HomePageState extends State<HomePage> {
 
   List<Map<String, dynamic>> allItemsList = [
     {
-      'title': 'Item 1 title',
-      'description': 'item 1 description',
-      'number': 1,
+      'title': 'Master Room Sea View',
+      'description': 'King Bed Room with beautiful sea view',
+      'capacity': '1 : 2',
       'isSelected': false
     },
     {
-      'title': 'Item 2 title',
-      'description': 'item 2 description',
-      'number': 2,
+      'title': 'Master Room City View',
+      'description': 'King Bed Room with luxurious city view',
+      'capacity': '1 : 2',
       'isSelected': false
     },
     {
-      'title': 'Item 3 title',
-      'description': 'item 3 description',
-      'number': 3,
+      'title': 'Twin Room Sea View',
+      'description': 'Two beds Room for two people with beautiful sea view',
+      'capacity': '2',
       'isSelected': false
     },
     {
-      'title': 'Item 4 title',
-      'description': 'item 4 description',
-      'number': 4,
+      'title': 'Twin Room City View',
+      'description': 'Two beds Room for two people with luxurious city view',
+      'capacity': '2',
       'isSelected': false
     },
     {
-      'title': 'Item 5 title',
-      'description': 'item 5 description',
-      'number': 5,
+      'title': 'Triple Room Sea View',
+      'description':
+          'Three beds Room for three or more people with beautiful sea view',
+      'capacity': '1 : 3',
       'isSelected': false
     },
     {
-      'title': 'Item 6 title',
-      'description': 'item 6 description',
-      'number': 6,
+      'title': 'Triple Room City View',
+      'description':
+          'Three beds Room for three or more people with luxurious city view',
+      'capacity': '1 : 3',
       'isSelected': false
     },
   ];
@@ -104,30 +106,9 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           Text('Select items:'),
           Expanded(
-            child: ListView.builder(
-              itemCount: allItemsList.length,
-              itemBuilder: (context, index) {
-                String itemName = allItemsList[index]['title'];
-                String itemDescription = allItemsList[index]['description'];
-                int itemNumber = allItemsList[index]['number'];
-                bool isSelected = allItemsList[index]['isSelected'];
-                return CheckListOption(
-                  isSelected: isSelected,
-                  itemName: itemName,
-                  itemText: '''
-Item description: $itemDescription
-Item count: $itemNumber
-''',
-                  onChangedFn: (value) {
-                    setState(
-                      () {
-                        allItemsList[index]['isSelected'] = value!;
-                        updateFilteredList();
-                      },
-                    );
-                  },
-                );
-              },
+            child: CheckListOptionsList(
+              itemsList: allItemsList,
+              updateFilteredListFn: updateFilteredList,
             ),
           ),
           Divider(),
@@ -151,7 +132,7 @@ Item count: $itemNumber
 
 class CheckListOption extends StatefulWidget {
   final String itemName;
-  final String itemText;
+  final Column itemText;
   final bool isSelected;
   final Function(bool?)? onChangedFn;
 
@@ -172,9 +153,67 @@ class _CheckListOptionState extends State<CheckListOption> {
   Widget build(BuildContext context) {
     return CheckboxListTile(
       title: Text(widget.itemName),
-      subtitle: Text(widget.itemText),
+      subtitle: widget.itemText,
       value: widget.isSelected,
       onChanged: widget.onChangedFn,
+    );
+  }
+}
+
+class CheckListOptionsList extends StatefulWidget {
+  final List<Map<String, dynamic>> itemsList;
+  final Function updateFilteredListFn;
+
+  const CheckListOptionsList({
+    super.key,
+    required this.itemsList,
+    required this.updateFilteredListFn,
+  });
+
+  @override
+  State<CheckListOptionsList> createState() => _CheckListOptionsListState();
+}
+
+class _CheckListOptionsListState extends State<CheckListOptionsList> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: widget.itemsList.length,
+      itemBuilder: (context, index) {
+        String itemName = widget.itemsList[index]['title'];
+        String itemDescription = widget.itemsList[index]['description'];
+        String itemcapacity = widget.itemsList[index]['capacity'];
+        bool isSelected = widget.itemsList[index]['isSelected'];
+        return CheckListOption(
+          isSelected: isSelected,
+          itemName: itemName,
+          itemText: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('$itemDescription'),
+              Row(
+                children: [
+                  Icon(
+                    Icons.person,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('$itemcapacity')
+                ],
+              )
+            ],
+          ),
+          onChangedFn: (value) {
+            setState(
+              () {
+                widget.itemsList[index]['isSelected'] = value!;
+                widget.updateFilteredListFn();
+              },
+            );
+          },
+        );
+      },
     );
   }
 }
