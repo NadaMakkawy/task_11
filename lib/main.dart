@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Task 11',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -46,6 +47,7 @@ class _HomePageState extends State<HomePage> {
       'capacity': '1 : 2',
       'isSelected': false,
       'imagePath': 'assets/master-sea.jpg',
+      'view': 'Sea View'
     },
     {
       'title': 'Master Room City View',
@@ -53,6 +55,7 @@ class _HomePageState extends State<HomePage> {
       'capacity': '1 : 2',
       'isSelected': false,
       'imagePath': 'assets/master-city.jpg',
+      'view': 'City View'
     },
     {
       'title': 'Twin Room Sea View',
@@ -60,6 +63,7 @@ class _HomePageState extends State<HomePage> {
       'capacity': '2',
       'isSelected': false,
       'imagePath': 'assets/twin-sea.jpg',
+      'view': 'Sea View'
     },
     {
       'title': 'Twin Room City View',
@@ -67,6 +71,7 @@ class _HomePageState extends State<HomePage> {
       'capacity': '2',
       'isSelected': false,
       'imagePath': 'assets/twin-city.jpg',
+      'view': 'City View'
     },
     {
       'title': 'Triple Room Sea View',
@@ -75,6 +80,7 @@ class _HomePageState extends State<HomePage> {
       'capacity': '1 : 3',
       'isSelected': false,
       'imagePath': 'assets/three-bed-sea.jpg',
+      'view': 'Sea View'
     },
     {
       'title': 'Triple Room City View',
@@ -83,22 +89,36 @@ class _HomePageState extends State<HomePage> {
       'capacity': '1 : 3',
       'isSelected': false,
       'imagePath': 'assets/three-bed-city.jpg',
+      'view': 'City View'
     },
   ];
 
   List<Map<String, dynamic>> filteredItems = [];
+  List<Map<String, dynamic>> viewFilteredItems = [];
+
+  String viewFilter = '';
 
   @override
   void initState() {
     super.initState();
-    filteredItems.addAll(allItemsList);
+    viewFilteredItems.addAll(allItemsList);
   }
+
+  // void updateViewFilteredList() {
+  //   viewFilteredItems = allItemsList
+  //       .where((item) => item['view'] == viewFilter || viewFilter.isEmpty)
+  //       .toList();
+
+  //   setState(() {});
+  // }
 
   void updateFilteredList() {
     filteredItems = allItemsList.where((item) => item['isSelected']).toList();
-    if (filteredItems.isEmpty) {
-      filteredItems.addAll(allItemsList);
-    }
+
+    viewFilteredItems = allItemsList
+        .where((item) => item['view'] == viewFilter || viewFilter.isEmpty)
+        .toList();
+
     setState(() {});
   }
 
@@ -108,12 +128,73 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title!),
       ),
-      body: Column(
+      body:
+          // first simple checklist
+          //  Column(
+          //   children: <Widget>[
+          //     Text('Select items:'),
+          //     Expanded(
+          //       child: CheckListOptionsList(
+          //         itemsList: allItemsList,
+          //         updateFilteredListFn: updateFilteredList,
+          //       ),
+          //     ),
+          //     Divider(),
+          //     Text('Filtered List:'),
+          //     Expanded(
+          //       child: ListView.builder(
+          //         itemCount: filteredItems.length,
+          //         itemBuilder: (context, index) {
+          //           String itemName = filteredItems[index]['title'];
+          //           return ListTile(
+          //             title: Text(itemName),
+          //           );
+          //         },
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          //     );
+          //   }
+          // }
+
+          // checklist based on filters
+          Column(
         children: <Widget>[
-          Text('Select items:'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  viewFilter = 'Sea View';
+                  updateFilteredList();
+                  setState(() {});
+                },
+                child: Text('Sea View'),
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  viewFilter = 'City View';
+                  updateFilteredList();
+                  setState(() {});
+                },
+                child: Text('City View'),
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  viewFilter = '';
+                  updateFilteredList();
+                  setState(() {});
+                },
+                child: Text('Clear Filter'),
+              ),
+            ],
+          ),
           Expanded(
             child: CheckListOptionsList(
-              itemsList: allItemsList,
+              itemsList: viewFilteredItems,
               updateFilteredListFn: updateFilteredList,
             ),
           ),
