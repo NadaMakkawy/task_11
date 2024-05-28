@@ -44,39 +44,45 @@ class _HomePageState extends State<HomePage> {
       'title': 'Master Room Sea View',
       'description': 'King Bed Room with beautiful sea view',
       'capacity': '1 : 2',
-      'isSelected': false
+      'isSelected': false,
+      'imagePath': 'assets/master-sea.jpg',
     },
     {
       'title': 'Master Room City View',
       'description': 'King Bed Room with luxurious city view',
       'capacity': '1 : 2',
-      'isSelected': false
+      'isSelected': false,
+      'imagePath': 'assets/master-city.jpg',
     },
     {
       'title': 'Twin Room Sea View',
       'description': 'Two beds Room for two people with beautiful sea view',
       'capacity': '2',
-      'isSelected': false
+      'isSelected': false,
+      'imagePath': 'assets/twin-sea.jpg',
     },
     {
       'title': 'Twin Room City View',
       'description': 'Two beds Room for two people with luxurious city view',
       'capacity': '2',
-      'isSelected': false
+      'isSelected': false,
+      'imagePath': 'assets/twin-city.jpg',
     },
     {
       'title': 'Triple Room Sea View',
       'description':
           'Three beds Room for three or more people with beautiful sea view',
       'capacity': '1 : 3',
-      'isSelected': false
+      'isSelected': false,
+      'imagePath': 'assets/three-bed-sea.jpg',
     },
     {
       'title': 'Triple Room City View',
       'description':
           'Three beds Room for three or more people with luxurious city view',
       'capacity': '1 : 3',
-      'isSelected': false
+      'isSelected': false,
+      'imagePath': 'assets/three-bed-city.jpg',
     },
   ];
 
@@ -132,6 +138,7 @@ class _HomePageState extends State<HomePage> {
 
 class CheckListOption extends StatefulWidget {
   final String itemName;
+  final String? imagePath;
   final Column itemText;
   final bool isSelected;
   final Function(bool?)? onChangedFn;
@@ -139,6 +146,7 @@ class CheckListOption extends StatefulWidget {
   const CheckListOption({
     super.key,
     required this.itemName,
+    this.imagePath,
     required this.itemText,
     required this.isSelected,
     required this.onChangedFn,
@@ -152,8 +160,18 @@ class _CheckListOptionState extends State<CheckListOption> {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
-      title: Text(widget.itemName),
-      subtitle: widget.itemText,
+      title: ListTile(
+        leading: Container(
+          child: Image.asset(widget.imagePath!),
+        ),
+        // CircleAvatar(
+        //   backgroundImage: AssetImage(widget.imagePath!),
+        //   radius: 30,
+        // ),
+        contentPadding: EdgeInsets.all(0),
+        title: Text(widget.itemName),
+        subtitle: widget.itemText,
+      ),
       value: widget.isSelected,
       onChanged: widget.onChangedFn,
     );
@@ -184,6 +202,8 @@ class _CheckListOptionsListState extends State<CheckListOptionsList> {
         String itemDescription = widget.itemsList[index]['description'];
         String itemcapacity = widget.itemsList[index]['capacity'];
         bool isSelected = widget.itemsList[index]['isSelected'];
+        String imagePath = widget.itemsList[index]['imagePath'];
+
         return CheckListOption(
           isSelected: isSelected,
           itemName: itemName,
@@ -212,6 +232,7 @@ class _CheckListOptionsListState extends State<CheckListOptionsList> {
               },
             );
           },
+          imagePath: imagePath,
         );
       },
     );
