@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:task_11/slide_bar_widget.dart';
 
+import 'extras_checklist_widget.dart';
+import 'slide_bar_widget.dart';
 import 'date_picker_widget.dart';
 
 void main() {
@@ -45,14 +46,17 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.bold, color: Colors.white, fontSize: 24),
         ),
       ),
-      body: ListView(
+      body: Column(
         children: [
           Container(
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             child: Image.asset('assets/entrance.jpg'),
           ),
           const DatePickerWidget(),
-          SlideBarWidget(),
+          const SlideBarWidget(),
+          Expanded(
+            child: ExtrasChecklistWidget(),
+          ),
         ],
       ),
     );
