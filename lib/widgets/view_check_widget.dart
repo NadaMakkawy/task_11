@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'summary_page.dart';
-import 'extras_data.dart';
-import 'room_model.dart';
-import 'rooms_data.dart';
+import '../pages/summary_page.dart';
+import '../data/extras_data.dart';
+import '../models/room_model.dart';
+import '../data/rooms_data.dart';
 
 class ViewCheckWidget extends StatefulWidget {
   const ViewCheckWidget({super.key});
@@ -41,7 +41,7 @@ class _ViewCheckWidgetState extends State<ViewCheckWidget> {
   }
 
   void updateFilteredList() {
-    selectedItemsPrice.clear();
+    // selectedItemsPrice.clear();
 
     filteredItems = rooms.where((item) => item.isSelected).toList();
 
@@ -66,6 +66,7 @@ class _ViewCheckWidgetState extends State<ViewCheckWidget> {
             itemBuilder: (context, index) {
               final item = extrasData[index];
               return CheckboxListTile(
+                activeColor: Colors.blue,
                 title: Text(item['title']),
                 value: item['isSelected'],
                 onChanged: (value) {
@@ -80,13 +81,6 @@ class _ViewCheckWidgetState extends State<ViewCheckWidget> {
                 },
               );
             },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            'Total Price: \$${totalPrice.toStringAsFixed(2)}',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
         Row(
@@ -172,6 +166,13 @@ class _ViewCheckWidgetState extends State<ViewCheckWidget> {
             },
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
       ],
     );
   }
@@ -212,6 +213,10 @@ class SelectedRoomInfo extends StatelessWidget {
             ),
           ),
           ListTile(
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.orange,
+            ),
             leading: Image.asset(room!.imagePath),
             title: Text(
               room!.title,
@@ -268,6 +273,7 @@ class _CheckListOptionState extends State<CheckListOption> {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
+      activeColor: Colors.orange,
       title: ListTile(
         leading: Image.asset(widget.imagePath!),
         contentPadding: const EdgeInsets.all(0),

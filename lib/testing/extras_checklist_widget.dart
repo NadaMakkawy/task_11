@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'extras_data.dart';
+import '../data/extras_data.dart';
 
 class ExtrasChecklistWidget extends StatefulWidget {
   final List<Map<String, dynamic>> selectedItemsPrice;

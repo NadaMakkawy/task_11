@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'room_model.dart';
-import 'rooms_data.dart';
+import '../models/room_model.dart';
+import '../data/rooms_data.dart';
 
 class RoomListView extends StatefulWidget {
   const RoomListView({super.key});

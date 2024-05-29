@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'rooms_data.dart';
+import '../data/rooms_data.dart';
 
 class SlideBarWidget extends StatefulWidget {
   const SlideBarWidget({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'view_check_widget.dart';
-import 'slide_bar_widget.dart';
-import 'date_picker_widget.dart';
+import 'widgets/view_check_widget.dart';
+import 'widgets/slide_bar_widget.dart';
+import 'widgets/date_picker_widget.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_11/extras_data.dart';
-import 'package:task_11/rooms_data.dart';
+import 'package:task_11/data/extras_data.dart';
+import 'package:task_11/data/rooms_data.dart';
 
 class ChecklistItem {
   final String name;
