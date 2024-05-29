@@ -1,86 +1,56 @@
 import 'package:flutter/material.dart';
 
+import 'extras_data.dart';
+
 class ExtrasChecklistWidget extends StatefulWidget {
-  const ExtrasChecklistWidget({super.key});
+  final List<Map<String, dynamic>> selectedItemsPrice;
+  final double totalPrice;
+
+  ExtrasChecklistWidget({
+    super.key,
+    required this.selectedItemsPrice,
+    required this.totalPrice,
+  });
 
   @override
   State<ExtrasChecklistWidget> createState() => _ExtrasChecklistWidgetState();
 }
 
 class _ExtrasChecklistWidgetState extends State<ExtrasChecklistWidget> {
-  List<Map<String, dynamic>> extrasList = [
-    {
-      'title': 'Breakfast',
-      'price': 10.0,
-      'isSelected': false,
-    },
-    {
-      'title': 'Internet WiFi',
-      'price': 5.0,
-      'isSelected': false,
-    },
-    {
-      'title': 'Parking',
-      'price': 5.0,
-      'isSelected': false,
-    },
-    {
-      'title': 'Swimming Pool',
-      'price': 10.0,
-      'isSelected': false,
-    },
-  ];
-
-  List<Map<String, dynamic>> filteredItems = [];
-
-  @override
-  void initState() {
-    super.initState();
-    filteredItems.addAll(extrasList);
-  }
-
-  double calculateTotalPrice() {
-    double totalPrice = 0.0;
-    for (var item in filteredItems) {
-      if (item['isSelected']) {
-        totalPrice += item['price'];
-      }
-    }
-    return totalPrice;
-  }
-
   @override
   Widget build(BuildContext context) {
+    // final totalPrice = getTotalPrice();
+
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: extrasList.length,
-          itemBuilder: (context, index) {
-            final item = extrasList[index];
-            return CheckboxListTile(
-              title: Text(
-                '${extrasList[index]['title']} - ${extrasList[index]['price']} EGP',
-              ),
-              value: item['isSelected'],
-              onChanged: (bool? value) {
-                item['isSelected'] = value;
-                setState(() {});
-              },
-            );
-          },
+        Expanded(
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: extrasData.length,
+            itemBuilder: (context, index) {
+              final item = extrasData[index];
+              return CheckboxListTile(
+                title: Text(item['title']),
+                value: item['isSelected'],
+                onChanged: (value) {
+                  setState(() {
+                    item['isSelected'] = value!;
+                    if (value) {
+                      widget.selectedItemsPrice.add(item);
+                    } else {
+                      widget.selectedItemsPrice.remove(item);
+                    }
+                  });
+                },
+              );
+            },
+          ),
         ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          alignment: Alignment.center,
+        Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Text(
-            'Total Price: ${calculateTotalPrice()} EGP',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+            'Total Price: \$${widget.totalPrice.toStringAsFixed(2)}',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
       ],

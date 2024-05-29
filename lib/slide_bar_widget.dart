@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'rooms_data.dart';
+
 class SlideBarWidget extends StatefulWidget {
   const SlideBarWidget({super.key});
 
@@ -8,6 +10,13 @@ class SlideBarWidget extends StatefulWidget {
 }
 
 class _SlideBarWidgetState extends State<SlideBarWidget> {
+  void filterRoomsData() {
+    List<Map<String, dynamic>> filteredRoomsbyCap = roomsData.where((room) {
+      int capacity = room['capacity'] as int;
+      return capacity >= adultSliderValue && capacity >= chilrenSliderValue;
+    }).toList();
+  }
+
   double adultSliderValue = 1;
   double chilrenSliderValue = 0;
 
@@ -17,47 +26,19 @@ class _SlideBarWidgetState extends State<SlideBarWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.start,
-          //   children: [
-          //     Flexible(
-          //       child: FittedBox(
-          //         child: Text(
-          //           'Adults: ${adultSliderValue.round()}',
-          //           style: const TextStyle(
-          //               fontSize: 16,
-          //               fontWeight: FontWeight.bold,
-          //               color: Colors.orange),
-          //         ),
-          //       ),
-          //     ),
-          //     const SizedBox(height: 20),
-          //     Slider(
-          //       value: adultSliderValue,
-          //       min: 1,
-          //       max: 5,
-          //       divisions: 4,
-          //       activeColor: Colors.blue,
-          //       label: adultSliderValue.round().toString(),
-          //       onChanged: (double value) {
-          //         adultSliderValue = value;
-          //         setState(() {});
-          //       },
-          //     ),
-          //   ],
-          // ),
-
           SlideBarTemp(
             currentSliderValue: adultSliderValue,
             title: 'Adults',
             minVal: 1,
             divisions: 4,
+            filterRoomsData: filterRoomsData,
           ),
           SlideBarTemp(
             currentSliderValue: chilrenSliderValue,
             title: 'Children',
             minVal: 0,
             divisions: 5,
+            filterRoomsData: filterRoomsData,
           ),
         ],
       ),
@@ -65,19 +46,20 @@ class _SlideBarWidgetState extends State<SlideBarWidget> {
   }
 }
 
-// ignore: must_be_immutable
 class SlideBarTemp extends StatefulWidget {
   double currentSliderValue;
   final String title;
   final double minVal;
   final int divisions;
+  final Function filterRoomsData;
 
   SlideBarTemp(
       {super.key,
       required this.currentSliderValue,
       required this.title,
       required this.minVal,
-      required this.divisions});
+      required this.divisions,
+      required this.filterRoomsData});
 
   @override
   State<SlideBarTemp> createState() => _SlideBarTempState();
@@ -112,6 +94,8 @@ class _SlideBarTempState extends State<SlideBarTemp> {
             label: widget.currentSliderValue.round().toString(),
             onChanged: (double value) {
               widget.currentSliderValue = value;
+              widget.filterRoomsData;
+
               setState(() {});
             },
           ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'summary_page.dart';
+import 'extras_data.dart';
 import 'room_model.dart';
 import 'rooms_data.dart';
 
@@ -17,6 +19,8 @@ class _ViewCheckWidgetState extends State<ViewCheckWidget> {
   List<RoomModel> filteredItems = [];
   List<RoomModel> viewFilteredItems = [];
 
+  List<Map<String, dynamic>> selectedItemsPrice = [];
+
   String viewFilter = '';
 
   RoomModel? selectedRoom;
@@ -27,7 +31,18 @@ class _ViewCheckWidgetState extends State<ViewCheckWidget> {
     viewFilteredItems.addAll(rooms);
   }
 
+  double getTotalPrice() {
+    double totalPrice = 0;
+    for (var item in selectedItemsPrice) {
+      totalPrice += item['price'];
+      setState(() {});
+    }
+    return totalPrice;
+  }
+
   void updateFilteredList() {
+    selectedItemsPrice.clear();
+
     filteredItems = rooms.where((item) => item.isSelected).toList();
 
     viewFilteredItems = rooms
@@ -39,45 +54,82 @@ class _ViewCheckWidgetState extends State<ViewCheckWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final totalPrice = getTotalPrice();
+
     return Column(
       children: [
+        Expanded(
+          flex: 2,
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: extrasData.length,
+            itemBuilder: (context, index) {
+              final item = extrasData[index];
+              return CheckboxListTile(
+                title: Text(item['title']),
+                value: item['isSelected'],
+                onChanged: (value) {
+                  setState(() {
+                    item['isSelected'] = value!;
+                    if (value) {
+                      selectedItemsPrice.add(item);
+                    } else {
+                      selectedItemsPrice.remove(item);
+                    }
+                  });
+                },
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Row(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Radio<String>(
-                  activeColor: Colors.orange,
-                  value: 'Sea View',
-                  groupValue: viewFilter,
-                  onChanged: (String? value) {
-                    setState(() {
-                      viewFilter = value!;
-                      updateFilteredList();
-                    });
-                  },
+                Row(
+                  children: [
+                    Radio<String>(
+                      activeColor: Colors.orange,
+                      value: 'Sea View',
+                      groupValue: viewFilter,
+                      onChanged: (String? value) {
+                        setState(() {
+                          viewFilter = value!;
+                          updateFilteredList();
+                        });
+                      },
+                    ),
+                    const Text('Sea View'),
+                  ],
                 ),
-                const Text('Sea View'),
+                const SizedBox(width: 10),
+                Row(
+                  children: [
+                    Radio<String>(
+                      activeColor: Colors.orange,
+                      value: 'City View',
+                      groupValue: viewFilter,
+                      onChanged: (String? value) {
+                        setState(() {
+                          viewFilter = value!;
+                          updateFilteredList();
+                        });
+                      },
+                    ),
+                    const Text('City View'),
+                  ],
+                ),
               ],
             ),
-            const SizedBox(width: 10),
-            Row(
-              children: [
-                Radio<String>(
-                  activeColor: Colors.orange,
-                  value: 'City View',
-                  groupValue: viewFilter,
-                  onChanged: (String? value) {
-                    setState(() {
-                      viewFilter = value!;
-                      updateFilteredList();
-                    });
-                  },
-                ),
-                const Text('City View'),
-              ],
-            ),
-            const SizedBox(width: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
@@ -94,7 +146,7 @@ class _ViewCheckWidgetState extends State<ViewCheckWidget> {
           ],
         ),
         Expanded(
-          flex: 1,
+          flex: 2,
           child: CheckListOptionsList(
             itemsList: viewFilteredItems,
             updateFilteredListFn: updateFilteredList,
@@ -102,11 +154,23 @@ class _ViewCheckWidgetState extends State<ViewCheckWidget> {
               selectedRoom = room;
               setState(() {});
             },
+            selectedItemsPrice: selectedItemsPrice,
           ),
         ),
-        const Divider(),
+        if (selectedRoom != null) const Divider(),
         Expanded(
-          child: SelectedRoomInfo(room: selectedRoom),
+          child: SelectedRoomInfo(
+            room: selectedRoom,
+            onRoomSelected: (room) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      SummaryPage(selectedItems: selectedItemsPrice),
+                ),
+              );
+            },
+          ),
         ),
       ],
     );
@@ -115,41 +179,67 @@ class _ViewCheckWidgetState extends State<ViewCheckWidget> {
 
 class SelectedRoomInfo extends StatelessWidget {
   final RoomModel? room;
+  final Function(RoomModel?)? onRoomSelected;
 
-  const SelectedRoomInfo({super.key, this.room});
+  const SelectedRoomInfo({
+    super.key,
+    this.room,
+    this.onRoomSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
     if (room == null) {
       return const SizedBox.shrink();
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Text(
-            '• Selected Room:',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.orange,
+    return GestureDetector(
+      onTap: () {
+        if (onRoomSelected != null) {
+          onRoomSelected!(room);
+        }
+      },
+      child: ListView(
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              '• Selected Room:',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.orange,
+              ),
             ),
           ),
-        ),
-        ListTile(
-          leading: Image.asset(room!.imagePath),
-          title: Text(room!.title),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(room!.description),
-              Text('Capacity: ${room!.capacity}'),
-              Text('View: ${room!.view}'),
-            ],
+          ListTile(
+            leading: Image.asset(room!.imagePath),
+            title: Text(
+              room!.title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(room!.description),
+                Row(
+                  children: [
+                    const Icon(Icons.person),
+                    Text(room!.capacity),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Icon(Icons.park),
+                    Text(room!.view),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -194,12 +284,14 @@ class CheckListOptionsList extends StatefulWidget {
   final List<RoomModel> itemsList;
   final Function updateFilteredListFn;
   final Function(RoomModel?) onItemSelected;
+  final List<Map<String, dynamic>> selectedItemsPrice;
 
   const CheckListOptionsList({
     super.key,
     required this.itemsList,
     required this.updateFilteredListFn,
     required this.onItemSelected,
+    required this.selectedItemsPrice,
   });
 
   @override
@@ -223,7 +315,12 @@ class _CheckListOptionsListState extends State<CheckListOptionsList> {
           activeColor: Colors.orange,
           title: ListTile(
             leading: Image.asset(imagePath),
-            title: Text(itemName),
+            title: Text(
+              itemName,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -252,6 +349,12 @@ class _CheckListOptionsListState extends State<CheckListOptionsList> {
             }
             widget.onItemSelected(room);
             widget.updateFilteredListFn();
+            if (room != null) {
+              widget.selectedItemsPrice.add({
+                'title': room.title,
+                'price': room.price,
+              });
+            }
             setState(() {});
           },
         );

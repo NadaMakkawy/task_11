@@ -5,7 +5,8 @@ List<Map<String, dynamic>> roomsData = [
     'capacity': '1 : 2',
     'isSelected': false,
     'imagePath': 'assets/master-sea.jpg',
-    'view': 'Sea View'
+    'view': 'Sea View',
+    'price': 250.0,
   },
   {
     'title': 'Master Room City View',
@@ -13,7 +14,8 @@ List<Map<String, dynamic>> roomsData = [
     'capacity': '1 : 2',
     'isSelected': false,
     'imagePath': 'assets/master-city.jpg',
-    'view': 'City View'
+    'view': 'City View',
+    'price': 200.0,
   },
   {
     'title': 'Twin Room Sea View',
@@ -21,7 +23,8 @@ List<Map<String, dynamic>> roomsData = [
     'capacity': '2',
     'isSelected': false,
     'imagePath': 'assets/twin-sea.jpg',
-    'view': 'Sea View'
+    'view': 'Sea View',
+    'price': 200.0,
   },
   {
     'title': 'Twin Room City View',
@@ -29,7 +32,8 @@ List<Map<String, dynamic>> roomsData = [
     'capacity': '2',
     'isSelected': false,
     'imagePath': 'assets/twin-city.jpg',
-    'view': 'City View'
+    'view': 'City View',
+    'price': 150.0,
   },
   {
     'title': 'Triple Room Sea View',
@@ -38,7 +42,8 @@ List<Map<String, dynamic>> roomsData = [
     'capacity': '1 : 3',
     'isSelected': false,
     'imagePath': 'assets/three-bed-sea.jpg',
-    'view': 'Sea View'
+    'view': 'Sea View',
+    'price': 300.0,
   },
   {
     'title': 'Triple Room City View',
@@ -47,6 +52,7 @@ List<Map<String, dynamic>> roomsData = [
     'capacity': '1 : 3',
     'isSelected': false,
     'imagePath': 'assets/three-bed-city.jpg',
-    'view': 'City View'
+    'view': 'City View',
+    'price': 250.0,
   },
 ];

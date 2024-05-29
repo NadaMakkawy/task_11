@@ -5,6 +5,7 @@ class RoomModel {
   bool isSelected;
   final String imagePath;
   final String view;
+  final double price;
 
   RoomModel({
     required this.title,
@@ -13,6 +14,7 @@ class RoomModel {
     required this.isSelected,
     required this.imagePath,
     required this.view,
+    required this.price,
   });
 
   factory RoomModel.fromJson(Map<String, dynamic> data) {
@@ -23,6 +25,7 @@ class RoomModel {
       isSelected: data['isSelected'],
       imagePath: data['imagePath'],
       view: data['view'],
+      price: data['price'],
     );
   }
 
@@ -34,6 +37,7 @@ class RoomModel {
       'isSelected': isSelected,
       'imagePath': imagePath,
       'view': view,
+      'price': price,
     };
   }
 }
